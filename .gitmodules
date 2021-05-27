@@ -1,0 +1,8 @@
+[submodule "libmetal"]
+	path = libmetal
+	url = https://github.com/TImada/libmetal.git
+	branch = raspi4-freertos
+[submodule "open-amp"]
+	path = open-amp
+	url = https://github.com/TImada/open-amp.git
+	branch = raspi4-freertos
