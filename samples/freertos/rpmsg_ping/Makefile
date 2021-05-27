@@ -1,7 +1,12 @@
 CROSS ?= aarch64-none-elf-
 
-LIBMETAL_PATH ?= ${RPMSG_TOP}/libmetal
-OPENAMP_PATH ?= ${RPMSG_TOP}/open-amp
+COMMON_PATH     = ../../common
+FREERTOS_PATH   = ../../../../raspi4_freertos/FreeRTOS
+KERNEL_PATH     = $(FREERTOS_PATH)/Source
+APP_PATH        = $(FREERTOS_PATH)/Demo/CORTEX_A72_64-bit_Raspberrypi4
+
+LIBMETAL_PATH   = ../../../libmetal
+OPENAMP_PATH    = ../../../open-amp
 
 LIB_PATH = -L$(LIBMETAL_PATH)/build/lib \
            -L$(OPENAMP_PATH)/build/lib
@@ -24,38 +29,42 @@ CFLAGS = -mcpu=cortex-a72 \
          -I$(INCLUDEPATH5) \
          -I$(INCLUDEPATH6) \
          -I$(INCLUDEPATH7) \
-         -I$(INCLUDEPATH8)
+         -I$(INCLUDEPATH8) \
+         -I$(INCLUDEPATH9)
 BUILTIN_OPS = -fno-builtin-memset
 ASMFLAGS = -mcpu=cortex-a72
 
-INCLUDEPATH1 ?= ./src
-INCLUDEPATH2 ?= ../musl_libc
-INCLUDEPATH3 ?= ../mmu
-INCLUDEPATH4 ?= ../../../Source/include
-INCLUDEPATH5 ?= ../../../Source/portable/GCC/ARM_CA72_64_BIT
-INCLUDEPATH6 ?= $(LIBMETAL_PATH)/build/lib/include
-INCLUDEPATH7 ?= $(OPENAMP_PATH)/lib/include
-INCLUDEPATH8 ?= $(OPENAMP_PATH)/apps/machine/raspi4
+INCLUDEPATH1 = ./src
+INCLUDEPATH2 = $(COMMON_PATH)
+INCLUDEPATH3 = $(APP_PATH)/musl_libc
+INCLUDEPATH4 = $(APP_PATH)/mmu
+INCLUDEPATH5 = $(KERNEL_PATH)/include
+INCLUDEPATH6 = $(KERNEL_PATH)/portable/GCC/ARM_CA72_64_BIT
+INCLUDEPATH7 = $(LIBMETAL_PATH)/build/lib/include
+INCLUDEPATH8 = $(OPENAMP_PATH)/lib/include
+INCLUDEPATH9 = $(OPENAMP_PATH)/apps/machine/raspi4
 
 # From ./src
 OBJS = build/startup.o 
 OBJS +=build/FreeRTOS_asm_vector.o
 OBJS +=build/FreeRTOS_tick_config.o
 OBJS +=build/helper.o
-OBJS +=build/interrupt.o
 OBJS +=build/main.o
 OBJS +=build/mmu_cfg.o
 OBJS +=build/printf.o
 OBJS +=build/rpmsg-ping.o
 OBJS +=build/uart.o
 
-# From ../mmu
+# From $(COMMON_PATH)
+OBJS +=build/interrupt.o
+
+# From $(APP_PATH)/mmu
 OBJS +=build/mmu.o
 
-# From ../cache
+# From $(APP_PATH)/cache
 OBJS +=build/cache.o
 
-# From ../musl_libc
+# From $(APP_PATH)/musl_libc
 OBJS +=build/memset.o
 OBJS +=build/memcpy.o
 
@@ -64,17 +73,17 @@ OBJS +=build/platform_info.o
 OBJS +=build/raspi4_a72_rproc.o
 OBJS +=build/rsc_table.o
 
-# From ../../../Source
+# From $(KERNEL_PATH)/Source
 OBJS +=build/list.o
 OBJS +=build/queue.o
 OBJS +=build/tasks.o
 OBJS +=build/timers.o
 
-# From ../../../Source/portable/GCC/ARM_CA72_64_BIT
+# From $(KERNEL_PATH)/Source/portable/GCC/ARM_CA72_64_BIT
 OBJS +=build/port.o
 OBJS +=build/portASM.o
 
-# From ../../../Source/portable/MemMang
+# From $(KERNEL_PATH)/Source/portable/MemMang
 OBJS +=build/heap_1.o
 
 rpmsg.elf : src/raspberrypi4.ld $(OBJS)
@@ -87,28 +96,31 @@ build/%.o : src/%.S
 build/%.o : src/%.c
 	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
 
-build/%.o : ../mmu/%.c
+build/%.o : $(COMMON_PATH)/%.c
 	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
 
-build/%.o : ../cache/%.S
+build/%.o : $(APP_PATH)/mmu/%.c
 	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
 
-build/%.o : ../musl_libc/%.c
+build/%.o : $(APP_PATH)/cache/%.S
+	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
+
+build/%.o : $(APP_PATH)/musl_libc/%.c
 	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
 
 build/%.o : $(OPENAMP_PATH)/apps/machine/raspi4/%.c
 	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
 
-build/%.o : ../../../Source/%.c
+build/%.o : $(KERNEL_PATH)/%.c
 	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
 
-build/%.o : ../../../Source/portable/GCC/ARM_CA72_64_BIT/%.c
+build/%.o : $(KERNEL_PATH)/portable/GCC/ARM_CA72_64_BIT/%.c
 	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
 
-build/%.o : ../../../Source/portable/GCC/ARM_CA72_64_BIT/%.S
+build/%.o : $(KERNEL_PATH)/portable/GCC/ARM_CA72_64_BIT/%.S
 	$(CROSS)as $(ASMFLAGS) -c -o $@ $<
 
-build/%.o : ../../../Source/portable/MemMang/%.c
+build/%.o : $(KERNEL_PATH)/portable/MemMang/%.c
 	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
 
 clean :
