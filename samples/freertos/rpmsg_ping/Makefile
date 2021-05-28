@@ -1,5 +1,7 @@
 CROSS ?= aarch64-none-elf-
 
+APP_NAME        = rpmsg_ping
+
 COMMON_PATH     = ../../common
 FREERTOS_PATH   = ../../../../raspi4_freertos/FreeRTOS
 KERNEL_PATH     = $(FREERTOS_PATH)/Source
@@ -86,9 +88,9 @@ OBJS +=build/portASM.o
 # From $(KERNEL_PATH)/Source/portable/MemMang
 OBJS +=build/heap_1.o
 
-rpmsg.elf : src/raspberrypi4.ld $(OBJS)
+$(APP_NAME).elf : src/raspberrypi4.ld $(OBJS)
 	$(CROSS)gcc -Wl,--build-id=none -std=gnu99 -T src/raspberrypi4.ld -o $@ -ffreestanding --specs=rdimon.specs $(BUILTIN_OPS) $(OBJS) $(LIB_PATH) $(LIBS)
-	$(CROSS)objdump -d rpmsg.elf > rpmsg.list
+	$(CROSS)objdump -d $(APP_NAME).elf > $(APP_NAME).list
 
 build/%.o : src/%.S
 	$(CROSS)as $(ASMFLAGS) -c -o $@ $<
@@ -126,5 +128,3 @@ build/%.o : $(KERNEL_PATH)/portable/MemMang/%.c
 clean :
 	rm -f build/*.o
 	rm -f *.elf
-	rm -f *.list
-
