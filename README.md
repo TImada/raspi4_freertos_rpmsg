@@ -21,11 +21,11 @@ You can find Raspberry Pi 4B specific code at [libmetal](https://github.com/TIma
 
 ### FreeRTOS (rpmsg_ping)
 
-Follow [this instruction](https://github.com/TImada/raspi4_freertos_rpmsg/docs/freertos_build.md).
+Follow [this instruction](https://github.com/TImada/raspi4_freertos_rpmsg/blob/master/docs/freertos_build.md).
 
 ### Linux (rpmsg_echo)
 
-Follow [this instruction](https://github.com/TImada/raspi4_freertos_rpmsg/docs/linux_build.md).
+Follow [this instruction](https://github.com/TImada/raspi4_freertos_rpmsg/blob/master/docs/linux_build.md).
 
 ## 3. How to run
 
