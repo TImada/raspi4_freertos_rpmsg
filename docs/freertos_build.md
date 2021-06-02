@@ -26,7 +26,7 @@ Clone it on the dedicated directory too. Therefore, you should see both `raspi4_
 
 ```
 $ cd ${RASPI4_BASE}
-$ git clone https://github.com/TImada/raspi4_freertos_rpmsg
+$ git clone --recursive https://github.com/TImada/raspi4_freertos_rpmsg
 $ ls ./
 raspi4_freertos raspi4_freertos_rpmsg
 ```
