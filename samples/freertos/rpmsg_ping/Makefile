@@ -46,6 +46,22 @@ INCLUDEPATH7 = $(LIBMETAL_PATH)/build/lib/include
 INCLUDEPATH8 = $(OPENAMP_PATH)/lib/include
 INCLUDEPATH9 = $(OPENAMP_PATH)/apps/machine/raspi4
 
+BUILDDIR =./build
+
+.PHONY: all clean
+
+all : builddir $(APP_NAME).elf
+
+builddir : | $(BUILDDIR)
+
+$(BUILDDIR) :
+	mkdir $@
+
+clean :
+	rm -rf ./build
+	rm -f *.elf
+	rm -f *.list
+
 # From ./src
 OBJS = build/startup.o 
 OBJS +=build/FreeRTOS_asm_vector.o
@@ -125,6 +141,3 @@ build/%.o : $(KERNEL_PATH)/portable/GCC/ARM_CA72_64_BIT/%.S
 build/%.o : $(KERNEL_PATH)/portable/MemMang/%.c
 	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
 
-clean :
-	rm -f build/*.o
-	rm -f *.elf
