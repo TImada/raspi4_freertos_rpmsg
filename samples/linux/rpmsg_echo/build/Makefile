@@ -18,6 +18,21 @@ OBJS +=objs/raspi4_a72_rproc.o
 # From ../../../common
 OBJS +=objs/interrupt.o
 
+OBJDIR =./objs
+
+.PHONY: all clean
+
+all : objdir $(NAME)
+
+objdir : | $(OBJDIR)
+
+$(OBJDIR) :
+	mkdir $@
+
+clean :
+	rm -rf $(OBJDIR)
+	rm -f $(NAME)
+
 $(NAME) : $(OBJS)
 	$(CROSS)gcc -std=gnu99 -o $@ -O2 $(OBJS) -L/usr/local/lib -lmetal -lopen_amp 
 
@@ -29,9 +44,3 @@ objs/%.o : ../../../../open-amp/apps/machine/raspi4/%.c
 
 objs/%.o : ../../../common/%.c
 	$(CROSS)gcc $(CFLAGS) -c -o $@ $<
-
-.PHONY: clean
-clean :
-	rm -f objs/*.o
-	rm -f $(NAME)
-
