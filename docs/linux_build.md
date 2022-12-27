@@ -46,6 +46,8 @@ $ sudo make VERBOSE=1 install
 
 (libopen_amp will be installed into `/usr/local/lib`)
 
+**Do not forget to add `/usr/local/lib` to the `${LD_LIBRARY_PATH}` variable on your shell!**
+
 ## 3. Compile Linux RPMSG sample
 
 ```bash

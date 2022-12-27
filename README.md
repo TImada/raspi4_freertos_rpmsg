@@ -35,7 +35,14 @@ Basically this step is quite similar to the step done for the FreeRTOS UART samp
 
 (2) Make sure that Linux finishes booting up completely at this time.
 
-(3) Then, move to the `rpmsg_echo` build directory on your Raspberry Pi 4B, then launch `rpmsg_echo.elf`.
+(3) Make sure that the libmetal/open-amp library installtion path (`/usr/local/lib` in default) is configured on your Linux shell. Add it to `${LD_LIBRARY_PATH}` if it is missing.
+
+```
+$ echo ${LD_LIBRARY_PATH}
+/usr/local/lib
+```
+
+(4) Then, move to the `rpmsg_echo` build directory on your Raspberry Pi 4B, then launch `rpmsg_echo.elf`.
 
 ```
 $ cd raspi4_freertos_rpmsg/samples/linux/rpmsg_echo/build
