@@ -22,17 +22,17 @@ void vApplicationIdleHook( void );
 
 void main(void)
 {
-	TaskHandle_t task_rpmsg;
+    TaskHandle_t task_rpmsg;
 
-	uart_init();
-	uart_puts("\r\n****************************\r\n");
-	uart_puts("\r\n   FreeRTOS RPMSG Sample\r\n");
-	uart_puts("\r\n  (This sample uses UART2)\r\n");
-	uart_puts("\r\n****************************\r\n");
+    uart_init();
+    uart_puts("\r\n****************************\r\n");
+    uart_puts("\r\n   FreeRTOS RPMSG Sample\r\n");
+    uart_puts("\r\n  (This sample uses UART2)\r\n");
+    uart_puts("\r\n****************************\r\n");
 
-	xTaskCreate(TaskRPMSG, "Task RPMSG", 512, NULL, 0x10, &task_rpmsg);
+    xTaskCreate(TaskRPMSG, "Task RPMSG", 512, NULL, 0x10, &task_rpmsg);
 
-	vTaskStartScheduler();
+    vTaskStartScheduler();
 }
 /*-----------------------------------------------------------*/
 

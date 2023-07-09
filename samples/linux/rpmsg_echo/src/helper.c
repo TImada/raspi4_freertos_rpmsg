@@ -17,15 +17,15 @@
 
 int init_system()
 {
-	struct metal_init_params metal_param = METAL_INIT_DEFAULTS;
+    struct metal_init_params metal_param = METAL_INIT_DEFAULTS;
 
-	metal_param.log_level = LOG_INFO;
-	metal_init(&metal_param);
+    metal_param.log_level = LOG_INFO;
+    metal_init(&metal_param);
 
-	return 0;
+    return 0;
 }
 
 void cleanup_system()
 {
-	metal_finish();
+    metal_finish();
 }
