@@ -37,23 +37,23 @@ Make sure that your environment has `make` and `cmake` commands. Install them be
 
 (For libmetal)
 ```
-$ cd ${RASPI4_BASE}/libmetal
+$ cd ${RASPI4_BASE}/raspi4_freertos_rpmsg/libmetal
 $ mkdir build && cd build
 $ cmake ../ -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/raspi4-freertos.cmake -DCMAKE_C_FLAGS="-I${RASPI4_BASE}/raspi4_freertos/FreeRTOS/Source/include -I${RASPI4_BASE}/raspi4_freertos/FreeRTOS/Source/portable/GCC/ARM_CA72_64_BIT -I${RASPI4_BASE}/raspi4_freertos_rpmsg/samples/freertos/rpmsg_ping/src -O2 -g3"
 $ make VERBOSE=1
 ```
 
-(`CROSS_PREFIX` in `${RASPI4_BASE}/libmetal/cmakes/platforms/raspi4-freertos.cmake` must be changed depending on a compiler you installed)
+(`CROSS_PREFIX` in `${RASPI4_BASE}/raspi4_freertos_rpmsg/libmetal/cmakes/platforms/raspi4-freertos.cmake` must be changed depending on a compiler you installed)
 
 (For open-amp)
 ```
-$ cd ${RASPI4_BASE}/open-amp
+$ cd ${RASPI4_BASE}/raspi4_freertos_rpmsg/open-amp
 $ mkdir build && cd build
 $ cmake ../ -DCMAKE_TOOLCHAIN_FILE=../cmake/platforms/raspi4_a72_generic.cmake -DLIBMETAL_INCLUDE_DIR=../../libmetal/build/lib/include -DLIBMETAL_LIB=../../libmetal/build/lib/libmetal.a -DCMAKE_C_FLAGS="-I${RASPI4_BASE}/raspi4_freertos/FreeRTOS/Source/include -I${RASPI4_BASE}/raspi4_freertos/FreeRTOS/Source/portable/GCC/ARM_CA72_64_BIT -I${RASPI4_BASE}/raspi4_freertos_rpmsg/samples/freertos/rpmsg_ping/src -O2 -g3"
 $ make VERBOSE=1
 ```
 
-(`CROSS_PREFIX` in `${RASPI4_BASE}/open-amp/cmakes/platforms/raspi4_a72_generic.cmake` must be changed depending on a compiler you installed)
+(`CROSS_PREFIX` in `${RASPI4_BASE}/raspi4_freertos_rpmsg/open-amp/cmakes/platforms/raspi4_a72_generic.cmake` must be changed depending on a compiler you installed)
 
 You can remove `-g3` option at the `cmake` execution if you don't need debug information.
 
