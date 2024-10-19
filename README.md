@@ -31,7 +31,7 @@ Follow [this instruction](https://github.com/TImada/raspi4_freertos_rpmsg/blob/m
 
 Basically this step is quite similar to the step done for the FreeRTOS UART sample.
 
-(1) Follow [Launching FreeRTOS and Linux](https://github.com/TImada/raspi4_freertos) for the UART sample. You must build and execute the RPMSG sample. So the target directory is `raspi4_freertos_rpmsg/samples/freertos/rpmsg_ping/` and you will obtain `rpmsg_ping.elf` (FreeRTOS RPMSG sample). :-)
+(1) Follow [Launching FreeRTOS and Linux](https://github.com/TImada/raspi4_freertos#5-launching-freertos-and-linux) for the UART sample. You must build and execute the RPMSG sample. So the target directory is `raspi4_freertos_rpmsg/samples/freertos/rpmsg_ping/` and you will obtain `rpmsg_ping.elf` (FreeRTOS RPMSG sample). :-)
 
 (2) Make sure that Linux finishes booting up completely at this time.
 
