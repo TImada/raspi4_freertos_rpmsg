@@ -16,7 +16,7 @@ LIB_PATH = -L$(LIBMETAL_PATH)/build/lib \
 LIBS = -lmetal -lopen_amp
 
 CFLAGS = -mcpu=cortex-a72 \
-         -fPIC \
+         -fpic \
          -ffreestanding \
          -std=gnu99 \
          -O2 \
@@ -31,20 +31,17 @@ CFLAGS = -mcpu=cortex-a72 \
          -I$(INCLUDEPATH5) \
          -I$(INCLUDEPATH6) \
          -I$(INCLUDEPATH7) \
-         -I$(INCLUDEPATH8) \
-         -I$(INCLUDEPATH9)
-BUILTIN_OPS = -fno-builtin-memset
+         -I$(INCLUDEPATH8) 
 ASMFLAGS = -mcpu=cortex-a72
 
 INCLUDEPATH1 = ./src
 INCLUDEPATH2 = $(COMMON_PATH)
-INCLUDEPATH3 = $(APP_PATH)/musl_libc
-INCLUDEPATH4 = $(APP_PATH)/mmu
-INCLUDEPATH5 = $(KERNEL_PATH)/include
-INCLUDEPATH6 = $(KERNEL_PATH)/portable/GCC/ARM_CA72_64_BIT
-INCLUDEPATH7 = $(LIBMETAL_PATH)/build/lib/include
-INCLUDEPATH8 = $(OPENAMP_PATH)/lib/include
-INCLUDEPATH9 = $(OPENAMP_PATH)/apps/machine/raspi4
+INCLUDEPATH3 = $(APP_PATH)/mmu
+INCLUDEPATH4 = $(KERNEL_PATH)/include
+INCLUDEPATH5 = $(KERNEL_PATH)/portable/GCC/ARM_CA72_64_BIT
+INCLUDEPATH6 = $(LIBMETAL_PATH)/build/lib/include
+INCLUDEPATH7 = $(OPENAMP_PATH)/lib/include
+INCLUDEPATH8 = $(OPENAMP_PATH)/apps/machine/raspi4
 
 BUILDDIR =./build
 
@@ -60,7 +57,7 @@ $(BUILDDIR) :
 clean :
 	rm -rf ./build
 	rm -f *.elf
-	rm -f *.list
+	rm -f *.map
 
 # From ./src
 OBJS = build/startup.o 
@@ -82,10 +79,6 @@ OBJS +=build/mmu.o
 # From $(APP_PATH)/cache
 OBJS +=build/cache.o
 
-# From $(APP_PATH)/musl_libc
-OBJS +=build/memset.o
-OBJS +=build/memcpy.o
-
 # From $(OPENAMP_PATH)/apps/machine/raspi4
 OBJS +=build/platform_info.o
 OBJS +=build/raspi4_a72_rproc.o
@@ -105,7 +98,7 @@ OBJS +=build/portASM.o
 OBJS +=build/heap_1.o
 
 $(APP_NAME).elf : src/raspberrypi4.ld $(OBJS)
-	$(CROSS)gcc -Wl,-Map=$(APP_FILE).map -Wl,--build-id=none -std=gnu99 -T src/raspberrypi4.ld -o $@ -ffreestanding --specs=rdimon.specs $(BUILTIN_OPS) $(OBJS) $(LIB_PATH) $(LIBS)
+	$(CROSS)gcc -Wl,-Map=$(APP_NAME).map -Wl,--build-id=none -std=gnu99 -T src/raspberrypi4.ld -o $@ -ffreestanding --specs=rdimon.specs $(OBJS) $(LIB_PATH) $(LIBS)
 
 build/%.o : src/%.S
 	$(CROSS)as $(ASMFLAGS) -c -o $@ $<
@@ -120,9 +113,6 @@ build/%.o : $(APP_PATH)/mmu/%.c
 	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
 
 build/%.o : $(APP_PATH)/cache/%.S
-	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
-
-build/%.o : $(APP_PATH)/musl_libc/%.c
 	$(CROSS)gcc $(CFLAGS)  -c -o $@ $<
 
 build/%.o : $(OPENAMP_PATH)/apps/machine/raspi4/%.c
