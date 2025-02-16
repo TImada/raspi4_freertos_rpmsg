@@ -1,65 +1,85 @@
 ENTRY(_boot)
 
-CODE_BASE = 0x20000000;
-DATA_BASE = 0x20200000;
-STACK_TOP = 0x20600000;
-OAMP_SHM  = 0x20600000;
-PT_BASE   = 0x20800000;
+CODE_BASE   = 0x20000000;
+CODE_SIZE   = 0x00200000;
+DATA_BASE   = CODE_BASE + CODE_SIZE;
+DATA_SIZE   = 0x00400000;
+STACK_TOP   = DATA_BASE + DATA_SIZE; /* STACK in the upper end of DATA */
+OMP_BASE    = DATA_BASE + DATA_SIZE;
+OMP_SIZE    = 0x00200000;
+PT_BASE     = OMP_BASE + OMP_SIZE;
+PT_SIZE     = 0x00200000;
+
+MEMORY {
+    CODE  (rx) : ORIGIN = CODE_BASE, LENGTH = CODE_SIZE
+    DATA  (rw) : ORIGIN = DATA_BASE, LENGTH = DATA_SIZE
+    OMP   (rw) : ORIGIN = OMP_BASE,  LENGTH = OMP_SIZE
+    PT    (rw) : ORIGIN = PT_BASE,   LENGTH = PT_SIZE
+}
  
 SECTIONS
 {
-    /* Starts at 0x20000000 (assuming ends at 0x207FFFFF, 8MB). */
-    . = CODE_BASE;
-    __start = .;
-    __text_start = .;
+    /* Starts at 0x20000000 (assuming ends at 0x208FFFFF, 9MB). */
     .text :
     {
+        __start = .;
+        __text_start = .;
         KEEP(*(.vectors))
         KEEP(*(.text.boot))
         *(.text)
-    }
-    __text_end = .;
+        __text_end = .;
+    } > CODE
  
-    . = ALIGN(4096); /* Align to 4K */
-    . = DATA_BASE;
-    __data_start = .;
     .data :
     {
+        . = ALIGN(4096); /* align to page size */
+        __data_start = DATA_BASE;
         *(.data)
-    }
-    . = ALIGN(4096); /* Align to 4K */
-    __data_end = .;
+        __data_end = .;
+    } > DATA
  
-    __bss_start = .;
-    __bss_start__ = .;
     .bss :
     {
+        . = ALIGN(4096); /* align to page size */
+        __bss_start__ = .;
+        __bss_start = .;
         bss = .;
         *(.bss)
-    }
-    . = ALIGN(4096); /* Align to 4K */
-    __bss_end = .;
-    __bss_end__ = .;
-    end = .;
-    __end = .;
-    __end__ = .;
+        __bss_end__ = .;
+        __bss_end = .;
+    } > DATA
 
-    . = STACK_TOP ; /* Stack memory */
-    stack_top = .;
-
-    . = ALIGN(4096); /* Align to 4K */
-    . = OAMP_SHM ; /* Shared memory for OpenAMP */
-    .oamp :
+    .heap :
     {
+        . = ALIGN(4096); /* align to page size */
+        __heap_start__ = .;
+        end = __heap_start__;
+        _end = end;
+        __end = end;
+        __end__ = end;
+        KEEP(*(.heap))
+        __heap_end__ = .;
+        __HeapLimit = __heap_end__;
+    } > DATA
+
+    .stack :
+    {
+    } > DATA
+    stack_top = STACK_TOP;
+
+    .omp : /* Shared memory for OpenAMP */
+    {
+        . = ALIGN(4096); /* align to page size */
         *(.resource_table)
         *(.oamp)
-    }
+    } > OMP
 
-    . = ALIGN(4096); /* Align to 4K */
-    . = PT_BASE ; /* Page table */
     .pt :
     {
+        . = ALIGN(4096); /* align to page size */
         *(.pt)
-    }
+    } > PT
+
 }
 __bss_size = (__bss_end - __bss_start)>>3;
+
