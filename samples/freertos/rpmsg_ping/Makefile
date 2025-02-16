@@ -105,8 +105,7 @@ OBJS +=build/portASM.o
 OBJS +=build/heap_1.o
 
 $(APP_NAME).elf : src/raspberrypi4.ld $(OBJS)
-	$(CROSS)gcc -Wl,--build-id=none -std=gnu99 -T src/raspberrypi4.ld -o $@ -ffreestanding --specs=rdimon.specs $(BUILTIN_OPS) $(OBJS) $(LIB_PATH) $(LIBS)
-	$(CROSS)objdump -d $(APP_NAME).elf > $(APP_NAME).list
+	$(CROSS)gcc -Wl,-Map=$(APP_FILE).map -Wl,--build-id=none -std=gnu99 -T src/raspberrypi4.ld -o $@ -ffreestanding --specs=rdimon.specs $(BUILTIN_OPS) $(OBJS) $(LIB_PATH) $(LIBS)
 
 build/%.o : src/%.S
 	$(CROSS)as $(ASMFLAGS) -c -o $@ $<
