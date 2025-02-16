@@ -15,7 +15,7 @@ FreeRTOS (CPU core#3) sends a message to Linux (CPU core#0), then Linux sends it
 
 A used communication protocol is [RPMSG](https://github.com/OpenAMP/open-amp/wiki/RPMsg-Communication-Flow) in [OpenAMP](https://github.com/OpenAMP/open-amp/wiki/OpenAMP-Overview), one of shared-memory based communication protocols between remote processors. This implementation uses one of ARM Mailboxes implemented in BCM2711 to generate interrupts between two CPU cores.
 
-You can find Raspberry Pi 4B specific code at [libmetal](https://github.com/TImada/libmetal/tree/05e0e0511c0ac29ff658ff6d3a08a060e95ae7af/lib/system/freertos/raspi4) and [open-amp](https://github.com/TImada/open-amp/tree/a18533e2a45c93f4be15198527a16823d66c52d4/apps/machine/raspi4). Both the libraries are based on the tag `v2020.04.0`.
+You can find Raspberry Pi 4B specific code at [libmetal](https://github.com/TImada/libmetal/tree/raspi4-freertos/lib/system/freertos/raspi4) and [open-amp](https://github.com/TImada/open-amp/tree/raspi4-freertos/apps/machine/raspi4). Both the libraries are based on the tag `v2020.04.0`.
 
 ## 2. How to build
 
