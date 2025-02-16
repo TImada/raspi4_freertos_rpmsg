@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 #define UART_PRIORITY (0xA0U)
 
 void uart_putchar(uint8_t c);
